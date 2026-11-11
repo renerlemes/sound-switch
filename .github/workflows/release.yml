@@ -18,16 +18,16 @@ jobs:
       - name: Componentes
         uses: actions/checkout@v5
         with:
-          repository: renerlemes/electron-components
-          path: vendor/electron-components
+          repository: renerlemes/components-react
+          path: vendor/components-react
 
       - name: Link dos componentes
         shell: pwsh
         run: |
-          $dest = Join-Path (Resolve-Path (Join-Path $PWD '..\..\..')).Path 'Componentes\electron-components'
+          $dest = Join-Path (Resolve-Path (Join-Path $PWD '..\..\..')).Path 'Componentes\components-react'
           New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
           if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
-          Copy-Item -Recurse (Join-Path $PWD 'vendor\electron-components') $dest
+          Copy-Item -Recurse (Join-Path $PWD 'vendor\components-react') $dest
 
       - name: Versão
         id: version

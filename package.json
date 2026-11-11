@@ -19,7 +19,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json"
   },
   "devDependencies": {
-    "@electron-components/ui": "link:../../../Componentes/electron-components",
+    "@electron-components/ui": "link:../../../Componentes/components-react",
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",

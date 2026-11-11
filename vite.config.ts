@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig, type Plugin } from 'vite';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-const componentsRoot = path.resolve(root, '../../../Componentes/electron-components');
+const componentsRoot = path.resolve(root, '../../../Componentes/components-react');
 
 function productionCsp(): Plugin {
   return {
