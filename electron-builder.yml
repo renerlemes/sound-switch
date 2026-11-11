@@ -23,7 +23,7 @@ win:
   icon: build/icon.ico
   target: nsis
   artifactName: SoundSwitch_${version}_Setup.${ext}
-  signAndEditExecutable: false
+  signExecutable: false
 nsis:
   oneClick: false
   perMachine: false
