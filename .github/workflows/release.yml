@@ -15,13 +15,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Componentes
+      - name: Componentes - Checkout
         uses: actions/checkout@v5
         with:
           repository: renerlemes/components-react
           path: vendor/components-react
 
-      - name: Link dos componentes
+      - name: Componentes - Link
         shell: pwsh
         run: |
           $dest = Join-Path (Resolve-Path (Join-Path $PWD '..\..\..')).Path 'Componentes\components-react'
@@ -37,12 +37,12 @@ jobs:
           "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           "tag=v$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
-      - name: .NET
+      - name: .NET - Setup
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "10.0.x"
 
-      - name: Processo auxiliar
+      - name: .NET - SoundSwitch.Audio (AOT)
         shell: pwsh
         run: |
           dotnet publish native/SoundSwitch.Audio/SoundSwitch.Audio.csproj -c Release -r win-x64 -o native/dist
@@ -51,17 +51,18 @@ jobs:
           }
           if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed with exit code $LASTEXITCODE." }
 
-      - uses: pnpm/action-setup@v4
+      - name: pnpm - Setup
+        uses: pnpm/action-setup@v4
 
       - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: pnpm
 
-      - name: Dependências
+      - name: pnpm - Dependências
         run: pnpm install --frozen-lockfile
 
-      - name: Instalador
+      - name: pnpm - Instalador
         shell: pwsh
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
@@ -74,7 +75,7 @@ jobs:
           pnpm exec electron-builder --win --publish never --config electron-builder.yml
           if ($LASTEXITCODE -ne 0) { throw "electron-builder failed with exit code $LASTEXITCODE." }
 
-      - name: GitHub Release
+      - name: GitHub - Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: pwsh
