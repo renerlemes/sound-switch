@@ -1,6 +1,7 @@
 export type SavedDevice = {
   Id: string;
   Name: string;
+  Alias?: string;
   Enabled: boolean;
 };
 
@@ -36,6 +37,7 @@ export function mergeDevices(saved: readonly SavedDevice[] | null | undefined, l
     merged.push({
       Id: endpoint.id,
       Name: endpoint.name,
+      Alias: keptAlias(previous?.Alias),
       Enabled: Boolean(previous?.Enabled),
       IconPath: endpoint.iconPath,
       Connected: true,
@@ -47,6 +49,7 @@ export function mergeDevices(saved: readonly SavedDevice[] | null | undefined, l
     merged.push({
       Id: entry.Id,
       Name: entry.Name,
+      Alias: keptAlias(entry.Alias),
       Enabled: true,
       IconPath: '',
       Connected: false,
@@ -107,6 +110,18 @@ export function cycleDefaultId(devices: readonly { Id: string }[], currentId: st
   return devices[current < 0 ? 0 : (current + 1) % devices.length]?.Id ?? null;
 }
 
+export function deviceLabel(device: { Name: string; Alias?: string }): string {
+  return keptAlias(device.Alias) ?? device.Name;
+}
+
+export function keptAlias(value: string | null | undefined): string | undefined {
+  const alias = value?.trim() ?? '';
+  return alias.length > 0 ? alias : undefined;
+}
+
 export function persistedDevices(devices: readonly DeviceEntry[]): SavedDevice[] {
-  return devices.map((device) => ({ Id: device.Id, Name: device.Name, Enabled: device.Enabled }));
+  return devices.map((device) => {
+    const alias = keptAlias(device.Alias);
+    return alias ? { Id: device.Id, Name: device.Name, Alias: alias, Enabled: device.Enabled } : { Id: device.Id, Name: device.Name, Enabled: device.Enabled };
+  });
 }

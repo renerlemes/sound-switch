@@ -1,5 +1,5 @@
 import { app, nativeTheme, Notification, nativeImage, type NativeImage } from 'electron';
-import { cycleDefaultId, enabledConnected, fillPreferred, mergeDevices, persistedDevices, preferredDeviceAction, type DeviceEntry, type LiveEndpoint } from '../core/devices';
+import { cycleDefaultId, deviceLabel, enabledConnected, fillPreferred, keptAlias, mergeDevices, persistedDevices, preferredDeviceAction, type DeviceEntry, type LiveEndpoint } from '../core/devices';
 import { idsToMute, idsToRestore } from '../core/mute-on-lock';
 import { shortcutFromInput } from '../core/shortcuts';
 import { formatVersion } from '../core/version';
@@ -118,6 +118,23 @@ export class AppController {
     const runtime = playback ? this.playback : this.recording;
     const shown = runtime.find((device) => same(device.Id));
     if (shown) shown.Enabled = enabled;
+    this.persist();
+  }
+
+  setAlias(playback: boolean, id: string, alias: string): void {
+    const same = (deviceId: string) => deviceId.toLowerCase() === id.toLowerCase();
+    const devices = playback ? this.settings.Audio.Devices.Playback : this.settings.Audio.Devices.Recording;
+    const runtime = playback ? this.playback : this.recording;
+    const shown = runtime.find((device) => same(device.Id));
+    const current = devices.find((device) => same(device.Id));
+    const original = shown?.Name ?? current?.Name ?? '';
+    const next = keptAlias(alias);
+    const stored = next && next !== original ? next : undefined;
+    if (current) {
+      if (stored) current.Alias = stored;
+      else delete current.Alias;
+    }
+    if (shown) shown.Alias = stored;
     this.persist();
   }
 
@@ -319,7 +336,8 @@ export class AppController {
       .filter((device) => device.Connected)
       .map((device) => ({
         id: device.Id,
-        name: device.Name,
+        name: deviceLabel(device),
+        originalName: device.Name,
         enabled: device.Enabled,
         connected: device.Connected,
         iconUrl: this.icons.get(device.IconPath) ?? null,
@@ -331,7 +349,7 @@ export class AppController {
     const current = this.playback.find((device) => this.defaultPlaybackId && device.Id.toLowerCase() === this.defaultPlaybackId.toLowerCase());
     const image = current ? (this.trayBitmaps.get(current.Id) ?? this.bitmaps.get(current.Id)) : undefined;
     this.tray.setImage(trayImage(image ?? null, this.fallbackIcon));
-    const name = current?.Name || 'SoundSwitch';
+    const name = current ? deviceLabel(current) : 'SoundSwitch';
     this.tray.setToolTip(name.length <= 63 ? name : name.slice(0, 63));
   }
 
@@ -389,7 +407,7 @@ export class AppController {
     if (!this.settings.Audio.ShowNotificationOnDeviceChange) return;
     const devices = playback ? this.playback : this.recording;
     const device = devices.find((item) => item.Id.toLowerCase() === id.toLowerCase());
-    this.notify(playback ? 'Reprodução' : 'Gravação', device?.Name || id);
+    this.notify(playback ? 'Reprodução' : 'Gravação', device ? deviceLabel(device) : id);
   }
 
   private notify(title: string, body: string, onClick?: () => void): void {
@@ -427,7 +445,7 @@ function asLive(device: LiveDevice): LiveEndpoint {
 }
 
 function listed(devices: DeviceEntry[]): TrayDevice[] {
-  return enabledConnected(devices).map((device) => ({ id: device.Id, name: device.Name }));
+  return enabledConnected(devices).map((device) => ({ id: device.Id, name: deviceLabel(device) }));
 }
 
 export function createAppTray(icon: NativeImage): Tray {

@@ -7,6 +7,7 @@ export type ThemeChoice = z.infer<typeof themeSchema>;
 export const savedDeviceSchema = z.object({
   Id: z.string(),
   Name: z.string(),
+  Alias: z.string().optional(),
   Enabled: z.boolean(),
 });
 
@@ -37,6 +38,7 @@ export const configurationSchema = z.object({
 export const deviceViewSchema = z.object({
   id: z.string(),
   name: z.string(),
+  originalName: z.string(),
   enabled: z.boolean(),
   connected: z.boolean(),
   iconUrl: z.string().nullable(),
@@ -70,6 +72,7 @@ export const ipcContract = {
   'settings.setMuteOnLock': z.object({ enabled: z.boolean() }),
   'settings.setNotifications': z.object({ enabled: z.boolean() }),
   'devices.setEnabled': z.object({ playback: z.boolean(), id: z.string().min(1), enabled: z.boolean() }),
+  'devices.setAlias': z.object({ playback: z.boolean(), id: z.string().min(1), alias: z.string() }),
   'devices.setShortcut': z.object({ playback: z.boolean(), shortcut: z.string() }),
   'devices.setDefault': z.object({ playback: z.boolean(), id: z.string().min(1) }),
   'hotkeys.suspend': z.object({ suspended: z.boolean() }),

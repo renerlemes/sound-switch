@@ -24,7 +24,8 @@
   background: var(--bg-elev);
 }
 
-[data-theme='light'] .theme-segment button.on {
+[data-theme='light'] .theme-segment button.on,
+[data-theme='light'] .theme-segment label.on {
   background: var(--bg-hover);
 }
 
@@ -92,12 +93,39 @@ input.shortcut-field {
   width: 24px;
 }
 
-.device-row > span {
+.device-name {
+  align-items: flex-start;
+  display: flex;
   flex: 1;
+  flex-direction: column;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+}
+
+.device-name-field.ec-input {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  color: inherit;
+  cursor: text;
+  text-align: left;
+}
+
+.device-name-field.ec-input.editing,
+.device-name-field.ec-input:focus {
+  background: var(--bg-elev-2);
+  border-color: var(--border);
+}
+
+.device-name-field.ec-input:focus {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.device-name .about-note {
+  margin: 1px 0 0;
+  max-width: 100%;
+  padding-left: 9px;
+  text-align: left;
 }
 
 .empty-devices {

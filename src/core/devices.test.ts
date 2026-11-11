@@ -20,7 +20,7 @@ describe('mergeDevices', () => {
   it('marca só o que já estava habilitado e guarda o desconectado marcado', () => {
     const merged = mergeDevices(
       [
-        { Id: 'a', Name: 'Antigo', Enabled: true },
+        { Id: 'a', Name: 'Antigo', Alias: '  Sala  ', Enabled: true },
         { Id: 'c', Name: 'Fone fora', Enabled: true },
         { Id: 'd', Name: 'Ignorado', Enabled: false },
         { Id: '', Name: 'Vazio', Enabled: true },
@@ -28,10 +28,10 @@ describe('mergeDevices', () => {
       live,
     );
 
-    expect(merged.map((device) => [device.Id, device.Enabled, device.Connected, device.Name])).toEqual([
-      ['a', true, true, 'Alto-falantes'],
-      ['b', false, true, 'Fone'],
-      ['c', true, false, 'Fone fora'],
+    expect(merged.map((device) => [device.Id, device.Enabled, device.Connected, device.Name, device.Alias])).toEqual([
+      ['a', true, true, 'Alto-falantes', 'Sala'],
+      ['b', false, true, 'Fone', undefined],
+      ['c', true, false, 'Fone fora', undefined],
     ]);
     expect(merged[0]?.IconPath).toBe('a.dll,-1');
   });

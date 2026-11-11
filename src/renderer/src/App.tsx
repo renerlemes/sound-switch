@@ -1,5 +1,5 @@
-import { Capsula, Folha, Grupo, Input, Introducao, Linha, Pagina, Toggle } from '@electron-components/ui';
-import { useEffect, useState } from 'react';
+import { Configuracao, Input, Intro, Segment, Toggle } from '@electron-components/ui';
+import { useEffect, useRef, useState } from 'react';
 import { captureShortcut } from '../../core/shortcuts';
 import type { AppState, ThemeChoice } from '../../shared/contracts';
 import { call, loadState, subscribe } from './api';
@@ -53,7 +53,7 @@ export function App() {
 
   if (!state.introCompleted) {
     return (
-      <Introducao
+      <Intro
         onSkip={() => commit(() => call('intro.complete'))}
         onFinish={() => commit(() => call('intro.complete'))}
         steps={[
@@ -104,7 +104,7 @@ export function App() {
   return (
     <div className="shell">
       <main className="content">
-        <Pagina>
+        <Configuracao>
           {error || state.audioError ? <p className="audio-error">{error ?? state.audioError}</p> : null}
           <header className="dashboard-hello">
             <h1>{greetingForHour(now.getHours())}</h1>
@@ -112,9 +112,8 @@ export function App() {
           </header>
           <DeviceGroup title="Reprodução" devices={state.playback} shortcut={state.playbackShortcut} playback commit={commit} />
           <DeviceGroup title="Gravação" devices={state.recording} shortcut={state.recordingShortcut} playback={false} commit={commit} />
-          <Grupo title="Aparência">
-            <Folha>
-              <Linha label="Tema">
+          <Configuracao.Grupo title="Aparência">
+            <Configuracao.Linha label="Tema">
                 <div className="theme-segment" role="radiogroup" aria-label="Tema">
                   <button
                     type="button"
@@ -134,47 +133,44 @@ export function App() {
                     Escuro
                   </button>
                 </div>
-              </Linha>
-            </Folha>
-          </Grupo>
-          <Grupo title="Configurações">
-            <Folha>
-              <Linha label="Iniciar com o Windows" note="Abre o aplicativo no login">
-                <Capsula
+            </Configuracao.Linha>
+          </Configuracao.Grupo>
+          <Configuracao.Grupo title="Configurações">
+            <Configuracao.Linha label="Iniciar com o Windows" note="Abre o aplicativo no login">
+                <Segment
                   label="Iniciar com o Windows"
                   value={state.autoStart ? 'sim' : 'nao'}
                   options={YES_NO}
                   onChange={(value) => commit(() => call('settings.setAutoStart', { enabled: value === 'sim' }))}
                 />
-              </Linha>
-              <Linha label="Mudo ao bloquear" note="Silencia o som ao bloquear e devolve ao desbloquear">
-                <Capsula
+            </Configuracao.Linha>
+            <Configuracao.Linha label="Mudo ao bloquear" note="Silencia o som ao bloquear e devolve ao desbloquear">
+                <Segment
                   label="Mudo ao bloquear"
                   value={state.muteOnLock ? 'sim' : 'nao'}
                   options={YES_NO}
                   onChange={(value) => commit(() => call('settings.setMuteOnLock', { enabled: value === 'sim' }))}
                 />
-              </Linha>
-              <Linha label="Notificações" note="Avisa quando o dispositivo padrão muda">
-                <Capsula
+            </Configuracao.Linha>
+            <Configuracao.Linha label="Notificações" note="Avisa quando o dispositivo padrão muda">
+                <Segment
                   label="Notificações"
                   value={state.showNotification ? 'sim' : 'nao'}
                   options={YES_NO}
                   onChange={(value) => commit(() => call('settings.setNotifications', { enabled: value === 'sim' }))}
                 />
-              </Linha>
-              <Linha label="Versão">
+            </Configuracao.Linha>
+            <Configuracao.Linha label="Versão">
                 <span className="about-value">{state.version}</span>
-              </Linha>
-              <Linha label="Atualizações" note={state.updateVersion ? `Disponível: ${state.updateVersion}` : 'Nenhuma atualização encontrada ainda'}>
+            </Configuracao.Linha>
+            <Configuracao.Linha label="Atualizações" note={state.updateVersion ? `Disponível: ${state.updateVersion}` : 'Nenhuma atualização encontrada ainda'}>
                 {state.updateProgress !== null ? <progress className="update-progress" max={100} value={state.updateProgress} /> : null}
                 <button type="button" className="ec-action" disabled={state.updateBusy} onClick={() => commit(() => (state.updateVersion ? call('update.download') : call('update.check')))}>
                   {state.updateVersion ? 'Atualizar' : 'Verificar atualizações'}
                 </button>
-              </Linha>
-            </Folha>
-          </Grupo>
-        </Pagina>
+            </Configuracao.Linha>
+          </Configuracao.Grupo>
+        </Configuracao>
       </main>
     </div>
   );
@@ -197,18 +193,17 @@ function DeviceGroup({
   const shown = draft ?? shortcut;
 
   return (
-    <Grupo title={title}>
-      <Folha>
+    <Configuracao.Grupo title={title}>
         {devices.length === 0 ? <p className="empty-devices">Nenhum dispositivo conectado.</p> : null}
         {devices.map((device) => (
           <div key={device.id} className="device-row">
             {device.iconUrl ? <img src={device.iconUrl} alt="" /> : null}
-            <span>{device.name}</span>
+            <DeviceName device={device} playback={playback} commit={commit} />
             <Toggle checked={device.enabled} label={device.name} onChange={(enabled) => commit(() => call('devices.setEnabled', { playback, id: device.id, enabled }))} />
           </div>
         ))}
         <div className="shortcut-line">
-          <Linha label="Atalho">
+          <Configuracao.Linha label="Atalho">
             <Input
               className="shortcut-field"
               aria-label={`Atalho de ${title}`}
@@ -235,10 +230,65 @@ function DeviceGroup({
                 commit(() => call('devices.setShortcut', { playback, shortcut: captured.text }));
               }}
             />
-          </Linha>
+          </Configuracao.Linha>
         </div>
-      </Folha>
-    </Grupo>
+    </Configuracao.Grupo>
+  );
+}
+
+function DeviceName({
+  device,
+  playback,
+  commit,
+}: {
+  device: AppState['playback'][number];
+  playback: boolean;
+  commit(work: () => Promise<AppState>): void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(device.name);
+  const cancel = useRef(false);
+
+  const save = (value: string) => {
+    setEditing(false);
+    if (value.trim() === device.name) return;
+    commit(() => call('devices.setAlias', { playback, id: device.id, alias: value }));
+  };
+
+  return (
+    <div className="device-name">
+      <Input
+        className={editing ? 'device-name-field editing' : 'device-name-field'}
+        aria-label={`Nome de ${device.originalName}`}
+        value={editing ? draft : device.name}
+        onFocus={() => {
+          setDraft(device.name);
+          setEditing(true);
+        }}
+        onChange={(event) => setDraft(event.target.value)}
+        onBlur={() => {
+          if (cancel.current) {
+            cancel.current = false;
+            setEditing(false);
+            return;
+          }
+          save(draft);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            event.currentTarget.blur();
+          }
+          if (event.key === 'Escape') {
+            event.preventDefault();
+            cancel.current = true;
+            setDraft(device.name);
+            event.currentTarget.blur();
+          }
+        }}
+      />
+      <span className="about-note">{device.originalName}</span>
+    </div>
   );
 }
 

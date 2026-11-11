@@ -45,6 +45,11 @@ async function run(controller: AppController, channel: IpcChannel, input: unknow
       controller.setEnabled(value.playback, value.id, value.enabled);
       return;
     }
+    case 'devices.setAlias': {
+      const value = input as { playback: boolean; id: string; alias: string };
+      controller.setAlias(value.playback, value.id, value.alias);
+      return;
+    }
     case 'devices.setShortcut': {
       const value = input as { playback: boolean; shortcut: string };
       controller.setShortcut(value.playback, value.shortcut);
