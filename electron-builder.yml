@@ -18,7 +18,7 @@ npmRebuild: false
 publish:
   provider: github
   owner: renerlemes
-  repo: SoundSwitch
+  repo: sound-switch
 win:
   icon: build/icon.ico
   target: nsis
