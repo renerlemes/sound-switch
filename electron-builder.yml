@@ -1,0 +1,35 @@
+appId: app.soundswitch.desktop
+productName: SoundSwitch
+icon: build/icon.ico
+copyright: Copyright © 2026 SoundSwitch
+directories:
+  output: release
+files:
+  - dist/**/*
+  - package.json
+  - '!**/*.map'
+extraResources:
+  - from: native/dist/SoundSwitch.Audio.exe
+    to: SoundSwitch.Audio.exe
+  - from: build/icon.ico
+    to: icon.ico
+asar: true
+npmRebuild: false
+publish:
+  provider: github
+  owner: renerlemes
+  repo: SoundSwitch
+win:
+  icon: build/icon.ico
+  target: nsis
+  artifactName: SoundSwitch_${version}_Setup.${ext}
+  signAndEditExecutable: false
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: SoundSwitch
+  deleteAppDataOnUninstall: false
+  include: build/installer.nsh

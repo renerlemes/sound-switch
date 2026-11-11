@@ -1,0 +1,7 @@
+node_modules
+dist
+release
+native/dist
+native/**/bin
+native/**/obj
+*.tsbuildinfo

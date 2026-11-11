@@ -1,0 +1,41 @@
+{
+  "name": "sound-switch",
+  "productName": "SoundSwitch",
+  "version": "1.0.10",
+  "private": true,
+  "type": "module",
+  "description": "SoundSwitch — troca de dispositivos de áudio pela bandeja do sistema",
+  "author": "SoundSwitch",
+  "main": "dist/main/index.cjs",
+  "packageManager": "pnpm@10.15.0",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "vite build && node scripts/build-main.mjs",
+    "start": "electron .",
+    "native": "dotnet publish native/SoundSwitch.Audio/SoundSwitch.Audio.csproj -c Release -r win-x64 -o native/dist",
+    "native:trimmed": "dotnet publish native/SoundSwitch.Audio/SoundSwitch.Audio.csproj -c Release -r win-x64 -o native/dist -p:PublishAot=false --self-contained true -p:PublishTrimmed=true",
+    "dist:win": "pnpm build && electron-builder --win --config electron-builder.yml",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json"
+  },
+  "devDependencies": {
+    "@electron-components/ui": "link:../../../Componentes/electron-components",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0",
+    "electron-updater": "6.6.2",
+    "esbuild": "0.28.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "5.9.3",
+    "vite": "8.3.5",
+    "vitest": "4.0.8",
+    "zod": "4.6.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["electron", "esbuild", "electron-winstaller"]
+  }
+}
