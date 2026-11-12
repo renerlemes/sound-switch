@@ -1,7 +1,7 @@
 {
   "name": "sound-switch",
   "productName": "SoundSwitch",
-  "version": "1.0.10",
+  "version": "1.0.9",
   "private": true,
   "type": "module",
   "description": "SoundSwitch — troca de dispositivos de áudio pela bandeja do sistema",
@@ -36,6 +36,10 @@
     "zod": "4.6.7"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["electron", "esbuild", "electron-winstaller"]
+    "onlyBuiltDependencies": [
+      "electron",
+      "esbuild",
+      "electron-winstaller"
+    ]
   }
 }

@@ -143,9 +143,24 @@ input.shortcut-field {
   padding: 10px 12px;
 }
 
+.update-progress-wrap {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 140px;
+}
+
 .update-progress {
   accent-color: var(--accent);
-  width: 140px;
+  width: 100%;
+}
+
+.update-progress-value {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.2;
+  margin-top: 2px;
+  text-align: center;
 }
 
 .dashboard-hello h1 {

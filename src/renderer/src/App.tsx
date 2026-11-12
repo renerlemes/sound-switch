@@ -164,7 +164,12 @@ export function App() {
                 <span className="about-value">{state.version}</span>
             </Configuration.Line>
             <Configuration.Line label="Atualizações" note={state.updateVersion ? `Disponível: ${state.updateVersion}` : 'Nenhuma atualização encontrada ainda'}>
-                {state.updateProgress !== null ? <progress className="update-progress" max={100} value={state.updateProgress} /> : null}
+                {state.updateProgress !== null ? (
+                  <div className="update-progress-wrap">
+                    <progress className="update-progress" max={100} value={state.updateProgress} />
+                    <span className="update-progress-value">{state.updateProgress}%</span>
+                  </div>
+                ) : null}
                 <button type="button" className="ec-action" disabled={state.updateBusy} onClick={() => commit(() => (state.updateVersion ? call('update.download') : call('update.check')))}>
                   {state.updateVersion ? 'Atualizar' : 'Verificar atualizações'}
                 </button>
