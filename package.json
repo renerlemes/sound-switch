@@ -4,7 +4,7 @@
   "version": "1.0.10",
   "private": true,
   "type": "module",
-  "description": "SoundSwitch — troca de dispositivos de áudio pela bandeja do sistema",
+  "description": "Aplicativo para alterar o dispositivo de reprodução/gravação padrão do sistema",
   "author": "SoundSwitch",
   "main": "dist/main/index.cjs",
   "packageManager": "pnpm@10.15.0",

@@ -33,7 +33,7 @@ export default defineConfig({
   plugins: [react(), productionCsp()],
   resolve: {
     alias: {
-      '@electron-components/ui': path.join(componentsRoot, 'src/index.ts'),
+      '@electron-components/ui': path.join(componentsRoot, 'src/desktop/index.ts'),
       'react/jsx-runtime': path.join(root, 'node_modules/react/jsx-runtime'),
       'react-dom': path.join(root, 'node_modules/react-dom'),
       react: path.join(root, 'node_modules/react'),

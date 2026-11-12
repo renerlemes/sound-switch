@@ -50,6 +50,7 @@ export class AppController {
       (version) => {
         this.notify('SoundSwitch', `Atualização para SoundSwitch (${formatVersion(version)}) está disponível`, () => this.showWindow());
       },
+      () => this.prepareQuit(),
     );
     this.audio.onDevicesChanged = () => this.scheduleRefresh();
     this.audio.onSession = (reason) => this.onSession(reason);

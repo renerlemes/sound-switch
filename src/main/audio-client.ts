@@ -76,8 +76,13 @@ export class AudioClient {
   }
 
   stop(): void {
-    this.child?.kill();
+    const child = this.child;
     this.child = null;
+    if (!child) return;
+    if (process.platform === 'win32' && child.pid !== undefined) {
+      spawn('taskkill.exe', ['/F', '/T', '/PID', String(child.pid)], { windowsHide: true, stdio: 'ignore', shell: false });
+    }
+    child.kill();
   }
 
   private request(cmd: string, extra: Record<string, unknown> = {}): Promise<SidecarMessage> {

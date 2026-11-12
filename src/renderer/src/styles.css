@@ -157,7 +157,7 @@ input.shortcut-field {
 
 .update-progress-value {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 10px;
   line-height: 1.2;
   margin-top: 2px;
   text-align: center;

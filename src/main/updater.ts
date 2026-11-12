@@ -8,7 +8,7 @@ export type UpdateSnapshot = {
   busy: boolean;
 };
 
-export function createUpdater(onChange: (snapshot: UpdateSnapshot) => void, onReady: (version: string) => void): {
+export function createUpdater(onChange: (snapshot: UpdateSnapshot) => void, onReady: (version: string) => void, beforeInstall: () => void): {
   snapshot: () => UpdateSnapshot;
   check: () => Promise<void>;
   download: () => Promise<void>;
@@ -38,6 +38,7 @@ export function createUpdater(onChange: (snapshot: UpdateSnapshot) => void, onRe
     state.busy = false;
     state.progress = 100;
     publish();
+    beforeInstall();
     autoUpdater.quitAndInstall(false, true);
   });
   autoUpdater.on('error', () => {
