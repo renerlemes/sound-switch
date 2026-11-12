@@ -72,7 +72,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "pnpm build failed with exit code $LASTEXITCODE." }
           node -e "const fs=require('fs'); const p=JSON.parse(fs.readFileSync('package.json','utf8')); p.version=process.env.APP_VERSION; fs.writeFileSync('package.json', JSON.stringify(p, null, 2)+'\n');"
           if ($LASTEXITCODE -ne 0) { throw "failed to set package version." }
-          pnpm exec electron-builder --win --publish never --config electron-builder.yml
+          node scripts/build-win.mjs --publish never
           if ($LASTEXITCODE -ne 0) { throw "electron-builder failed with exit code $LASTEXITCODE." }
 
       - name: GitHub - Release
