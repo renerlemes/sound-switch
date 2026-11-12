@@ -112,29 +112,6 @@ export function App() {
           </header>
           <DeviceGroup title="Reprodução" devices={state.playback} shortcut={state.playbackShortcut} playback commit={commit} />
           <DeviceGroup title="Gravação" devices={state.recording} shortcut={state.recordingShortcut} playback={false} commit={commit} />
-          <Configuration.Group title="Aparência">
-            <Configuration.Line label="Tema">
-                <div className="theme-segment" role="radiogroup" aria-label="Tema">
-                  <button
-                    type="button"
-                    role="radio"
-                    aria-checked={state.theme === 'system'}
-                    className={state.theme === 'system' ? 'on' : undefined}
-                    onClick={() => chooseTheme(state, commit, 'system')}>
-                    <MonitorIcon />
-                    Sistema
-                  </button>
-                  <button type="button" role="radio" aria-checked={state.theme === 'light'} className={state.theme === 'light' ? 'on' : undefined} onClick={() => chooseTheme(state, commit, 'light')}>
-                    <SunIcon />
-                    Claro
-                  </button>
-                  <button type="button" role="radio" aria-checked={state.theme === 'dark'} className={state.theme === 'dark' ? 'on' : undefined} onClick={() => chooseTheme(state, commit, 'dark')}>
-                    <MoonIcon />
-                    Escuro
-                  </button>
-                </div>
-            </Configuration.Line>
-          </Configuration.Group>
           <Configuration.Group title="Configurações">
             <Configuration.Line label="Iniciar com o Windows" note="Abre o aplicativo no login">
                 <Segment
@@ -159,6 +136,27 @@ export function App() {
                   options={YES_NO}
                   onChange={(value) => commit(() => call('settings.setNotifications', { enabled: value === 'sim' }))}
                 />
+            </Configuration.Line>
+            <Configuration.Line label="Tema">
+                <div className="theme-segment" role="radiogroup" aria-label="Tema">
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={state.theme === 'system'}
+                    className={state.theme === 'system' ? 'on' : undefined}
+                    onClick={() => chooseTheme(state, commit, 'system')}>
+                    <MonitorIcon />
+                    Sistema
+                  </button>
+                  <button type="button" role="radio" aria-checked={state.theme === 'light'} className={state.theme === 'light' ? 'on' : undefined} onClick={() => chooseTheme(state, commit, 'light')}>
+                    <SunIcon />
+                    Claro
+                  </button>
+                  <button type="button" role="radio" aria-checked={state.theme === 'dark'} className={state.theme === 'dark' ? 'on' : undefined} onClick={() => chooseTheme(state, commit, 'dark')}>
+                    <MoonIcon />
+                    Escuro
+                  </button>
+                </div>
             </Configuration.Line>
             <Configuration.Line label="Versão">
                 <span className="about-value">{state.version}</span>
