@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, unlinkSync } from 'node:fs';
 import path from 'node:path';
 import { app, BrowserWindow, ipcMain, type NativeImage, nativeImage, nativeTheme, shell } from 'electron';
 import { AppController, createAppTray } from './controller';
@@ -16,7 +16,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 function start(): void {
-  ensureNotificationName();
+  removeDevStartMenuShortcut();
   const icon = appIcon();
   let mainWindow: BrowserWindow | null = null;
 
@@ -103,17 +103,16 @@ function appIcon(): NativeImage {
   return nativeImage.createEmpty();
 }
 
-/** No desenvolvimento, o Windows só mostra o nome SoundSwitch na notificação se existir um atalho com o mesmo AppUserModelID. */
-function ensureNotificationName(): void {
+/** O desenvolvimento não cria atalho. Remove o que uma versão anterior gravou apontando para o electron.exe. */
+function removeDevStartMenuShortcut(): void {
   if (process.platform !== 'win32' || app.isPackaged) return;
   const shortcutPath = path.join(app.getPath('appData'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'SoundSwitch.lnk');
-  const icon = path.join(app.getAppPath(), 'build', 'icon.ico');
-  const base = {
-    target: process.execPath,
-    args: app.getAppPath(),
-    cwd: app.getAppPath(),
-    description: 'SoundSwitch',
-    appUserModelId: APP_USER_MODEL_ID,
-  };
-  shell.writeShortcutLink(shortcutPath, 'create', existsSync(icon) ? { ...base, icon, iconIndex: 0 } : base);
+  if (!existsSync(shortcutPath)) return;
+  try {
+    const target = shell.readShortcutLink(shortcutPath).target;
+    if (!target.toLowerCase().endsWith('electron.exe')) return;
+    unlinkSync(shortcutPath);
+  } catch {
+    // Atalho inacessível: a abertura segue sem ele.
+  }
 }
