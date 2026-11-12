@@ -11,3 +11,17 @@
     ExecWait $R0
   ${EndIf}
 !macroend
+
+!macro customInstall
+  ${IfNot} ${isNoDesktopShortcut}
+    ${If} ${FileExists} "$newDesktopLink"
+      CreateShortCut "$newDesktopLink" "$appExe" "" "$INSTDIR\resources\icon.ico" 0 "" "" "${APP_DESCRIPTION}"
+      WinShell::SetLnkAUMI "$newDesktopLink" "${APP_ID}"
+    ${EndIf}
+  ${EndIf}
+  ${If} ${FileExists} "$newStartMenuLink"
+    CreateShortCut "$newStartMenuLink" "$appExe" "" "$INSTDIR\resources\icon.ico" 0 "" "" "${APP_DESCRIPTION}"
+    WinShell::SetLnkAUMI "$newStartMenuLink" "${APP_ID}"
+  ${EndIf}
+  System::Call 'shell32::SHChangeNotify(i, i, i, i) v (0x08000000, 0, 0, 0)'
+!macroend

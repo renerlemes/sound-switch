@@ -1,4 +1,4 @@
-import { Configuracao, Input, Intro, Segment, Toggle } from '@electron-components/ui';
+import { Configuration, Input, Intro, Segment, Toggle } from '@electron-components/ui';
 import { useEffect, useRef, useState } from 'react';
 import { captureShortcut } from '../../core/shortcuts';
 import type { AppState, ThemeChoice } from '../../shared/contracts';
@@ -104,7 +104,7 @@ export function App() {
   return (
     <div className="shell">
       <main className="content">
-        <Configuracao>
+        <Configuration>
           {error || state.audioError ? <p className="audio-error">{error ?? state.audioError}</p> : null}
           <header className="dashboard-hello">
             <h1>{greetingForHour(now.getHours())}</h1>
@@ -112,8 +112,8 @@ export function App() {
           </header>
           <DeviceGroup title="Reprodução" devices={state.playback} shortcut={state.playbackShortcut} playback commit={commit} />
           <DeviceGroup title="Gravação" devices={state.recording} shortcut={state.recordingShortcut} playback={false} commit={commit} />
-          <Configuracao.Grupo title="Aparência">
-            <Configuracao.Linha label="Tema">
+          <Configuration.Group title="Aparência">
+            <Configuration.Line label="Tema">
                 <div className="theme-segment" role="radiogroup" aria-label="Tema">
                   <button
                     type="button"
@@ -133,44 +133,44 @@ export function App() {
                     Escuro
                   </button>
                 </div>
-            </Configuracao.Linha>
-          </Configuracao.Grupo>
-          <Configuracao.Grupo title="Configurações">
-            <Configuracao.Linha label="Iniciar com o Windows" note="Abre o aplicativo no login">
+            </Configuration.Line>
+          </Configuration.Group>
+          <Configuration.Group title="Configurações">
+            <Configuration.Line label="Iniciar com o Windows" note="Abre o aplicativo no login">
                 <Segment
                   label="Iniciar com o Windows"
                   value={state.autoStart ? 'sim' : 'nao'}
                   options={YES_NO}
                   onChange={(value) => commit(() => call('settings.setAutoStart', { enabled: value === 'sim' }))}
                 />
-            </Configuracao.Linha>
-            <Configuracao.Linha label="Mudo ao bloquear" note="Silencia o som ao bloquear e devolve ao desbloquear">
+            </Configuration.Line>
+            <Configuration.Line label="Mudo ao bloquear" note="Silencia o som ao bloquear e devolve ao desbloquear">
                 <Segment
                   label="Mudo ao bloquear"
                   value={state.muteOnLock ? 'sim' : 'nao'}
                   options={YES_NO}
                   onChange={(value) => commit(() => call('settings.setMuteOnLock', { enabled: value === 'sim' }))}
                 />
-            </Configuracao.Linha>
-            <Configuracao.Linha label="Notificações" note="Avisa quando o dispositivo padrão muda">
+            </Configuration.Line>
+            <Configuration.Line label="Notificações" note="Avisa quando o dispositivo padrão muda">
                 <Segment
                   label="Notificações"
                   value={state.showNotification ? 'sim' : 'nao'}
                   options={YES_NO}
                   onChange={(value) => commit(() => call('settings.setNotifications', { enabled: value === 'sim' }))}
                 />
-            </Configuracao.Linha>
-            <Configuracao.Linha label="Versão">
+            </Configuration.Line>
+            <Configuration.Line label="Versão">
                 <span className="about-value">{state.version}</span>
-            </Configuracao.Linha>
-            <Configuracao.Linha label="Atualizações" note={state.updateVersion ? `Disponível: ${state.updateVersion}` : 'Nenhuma atualização encontrada ainda'}>
+            </Configuration.Line>
+            <Configuration.Line label="Atualizações" note={state.updateVersion ? `Disponível: ${state.updateVersion}` : 'Nenhuma atualização encontrada ainda'}>
                 {state.updateProgress !== null ? <progress className="update-progress" max={100} value={state.updateProgress} /> : null}
                 <button type="button" className="ec-action" disabled={state.updateBusy} onClick={() => commit(() => (state.updateVersion ? call('update.download') : call('update.check')))}>
                   {state.updateVersion ? 'Atualizar' : 'Verificar atualizações'}
                 </button>
-            </Configuracao.Linha>
-          </Configuracao.Grupo>
-        </Configuracao>
+            </Configuration.Line>
+          </Configuration.Group>
+        </Configuration>
       </main>
     </div>
   );
@@ -193,7 +193,7 @@ function DeviceGroup({
   const shown = draft ?? shortcut;
 
   return (
-    <Configuracao.Grupo title={title}>
+    <Configuration.Group title={title}>
         {devices.length === 0 ? <p className="empty-devices">Nenhum dispositivo conectado.</p> : null}
         {devices.map((device) => (
           <div key={device.id} className="device-row">
@@ -203,7 +203,7 @@ function DeviceGroup({
           </div>
         ))}
         <div className="shortcut-line">
-          <Configuracao.Linha label="Atalho">
+          <Configuration.Line label="Atalho">
             <Input
               className="shortcut-field"
               aria-label={`Atalho de ${title}`}
@@ -230,9 +230,9 @@ function DeviceGroup({
                 commit(() => call('devices.setShortcut', { playback, shortcut: captured.text }));
               }}
             />
-          </Configuracao.Linha>
+          </Configuration.Line>
         </div>
-    </Configuracao.Grupo>
+    </Configuration.Group>
   );
 }
 
