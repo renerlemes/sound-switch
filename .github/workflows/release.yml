@@ -15,20 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Componentes - Checkout
-        uses: actions/checkout@v5
-        with:
-          repository: renerlemes/components-react
-          path: vendor/components-react
-
-      - name: Componentes - Link
-        shell: pwsh
-        run: |
-          $dest = Join-Path (Resolve-Path (Join-Path $PWD '..\..\..')).Path 'Componentes\components-react'
-          New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
-          if (Test-Path $dest) { Remove-Item $dest -Recurse -Force }
-          Copy-Item -Recurse (Join-Path $PWD 'vendor\components-react') $dest
-
       - name: Versão
         id: version
         shell: pwsh

@@ -1,0 +1,102 @@
+.welcome {
+  align-items: center;
+  background: radial-gradient(120% 90% at 50% 40%, #f7f8f6 0%, #e7f0ea 62%, #d7e7dc 100%);
+  color: #1c1c1c;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  z-index: 100;
+}
+
+.welcome-tone-1 {
+  background: radial-gradient(120% 90% at 50% 38%, #fbf8f3 0%, #f3eadf 68%, #efe4d6 100%);
+}
+
+.welcome-tone-2 {
+  background: radial-gradient(120% 90% at 50% 38%, #f7f9fb 0%, #e4ebf2 68%, #d5e0ea 100%);
+}
+
+.welcome-back,
+.welcome-skip {
+  background: transparent;
+  border: 0;
+  color: #3a3a3a;
+  cursor: pointer;
+  font-size: 13px;
+  position: absolute;
+  top: 16px;
+}
+
+.welcome-back {
+  left: 22px;
+}
+
+.welcome-skip {
+  right: 22px;
+}
+
+.welcome-body {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 440px;
+  padding: 24px;
+  text-align: center;
+}
+
+.welcome-body.illustrated {
+  max-width: 680px;
+}
+
+.welcome h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 28px 0 0;
+}
+
+.welcome-lead {
+  color: #3a3a3a;
+  font-size: 14px;
+  margin: 10px 0 0;
+}
+
+.welcome-text {
+  color: #6d6d6d;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 8px 0 0;
+}
+
+.welcome-next {
+  background: #1c1c1c;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 22px;
+  padding: 8px 18px;
+}
+
+.welcome-next:hover {
+  background: #2a2a2a;
+}
+
+.welcome-dots {
+  bottom: 28px;
+  display: flex;
+  gap: 8px;
+  position: absolute;
+}
+
+.welcome-dots i {
+  background: #cfcfcf;
+  border-radius: 50%;
+  display: block;
+  height: 6px;
+  width: 6px;
+}
+
+.welcome-dots i.on {
+  background: #1c1c1c;
+}

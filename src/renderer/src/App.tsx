@@ -1,4 +1,4 @@
-import { Configuration, Input, Intro, Segment, Toggle } from '@electron-components/ui';
+import { Configuration, Input, Intro, Segment, Toggle } from './components';
 import { useEffect, useRef, useState } from 'react';
 import { captureShortcut } from '../../core/shortcuts';
 import type { AppState, ThemeChoice } from '../../shared/contracts';

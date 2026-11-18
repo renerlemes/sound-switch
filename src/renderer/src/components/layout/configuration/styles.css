@@ -1,0 +1,51 @@
+.ec-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin: 0 auto;
+  max-width: 720px;
+  width: 100%;
+}
+
+.about-group h2 {
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+.settings-sheet {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.settings-row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.settings-sheet .settings-row + .settings-row {
+  position: relative;
+}
+
+.settings-sheet .settings-row + .settings-row::before {
+  border-top: 1px solid var(--border);
+  content: '';
+  left: 16px;
+  position: absolute;
+  right: 16px;
+  top: 0;
+}
+
+.settings-row-label {
+  color: #c5ced6;
+  font-weight: 500;
+}
+
+.about-note {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 6px 0 0;
+}

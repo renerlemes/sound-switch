@@ -1,0 +1,48 @@
+.ec-toggle {
+  align-items: center;
+  appearance: none;
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  flex: none;
+  height: 22px;
+  margin: 0;
+  padding: 2px;
+  width: 39px;
+}
+
+.ec-toggle .ec-toggle-thumb {
+  background: var(--muted);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+  display: block;
+  flex: none;
+  height: 16px;
+  transition:
+    background 120ms ease,
+    transform 120ms ease;
+  width: 16px;
+}
+
+.ec-toggle.on {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.ec-toggle.on .ec-toggle-thumb {
+  background: #fff;
+  transform: translateX(17px);
+}
+
+.ec-toggle:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.ec-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
