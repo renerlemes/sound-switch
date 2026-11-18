@@ -8,9 +8,6 @@ importers:
 
   .:
     devDependencies:
-      '@electron-components/ui':
-        specifier: link:../../../Componentes/components-react
-        version: link:../../../Componentes/components-react
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
